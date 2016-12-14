@@ -1,15 +1,14 @@
 class DrunkProxy < BasicObject
-  def initialize(targets)
-    @targets = targets
+  attr_reader :objects
+
+  def initialize(objects)
+    @objects = objects
   end
 
-  def method_missing(method, *args, &block)
-    compatible_targets = @targets.select { |target| target.respond_to? method }
+  def method_missing(name, *_)
+    mapped = objects.select { |o| o.respond_to? name }
+                    .map(&name)
 
-    if compatible_targets.count > 0
-      compatible_targets.map { |target| target.public_send method, *args, &block }
-    else
-      super
-    end
+    mapped.empty? ? super : mapped
   end
 end
