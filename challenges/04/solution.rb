@@ -5,9 +5,9 @@ class DrunkProxy < BasicObject
     @objects = objects
   end
 
-  def method_missing(name, *_)
+  def method_missing(name, *args)
     mapped = objects.select { |o| o.respond_to? name }
-                    .map(&name)
+                    .map { |o| o.send name, *args }
 
     mapped.empty? ? super : mapped
   end

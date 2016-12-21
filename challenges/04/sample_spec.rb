@@ -32,4 +32,9 @@ RSpec.describe 'DrunkProxy' do
     proxy = DrunkProxy.new ['foo', [24], {x: 2}]
     expect(proxy.class).to eq [String, Array, Hash]
   end
+
+  it 'calls with args' do
+    proxy = DrunkProxy.new [[1, 2, 3], [[1]]]
+    expect(proxy.flatten 1).to eq [[1, 2, 3], [1]]
+  end
 end
